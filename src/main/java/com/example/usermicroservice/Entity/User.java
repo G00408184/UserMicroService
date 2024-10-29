@@ -2,7 +2,7 @@ package com.example.usermicroservice.Entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "user")
@@ -27,6 +27,7 @@ public class User {
     @Column(name = "Password")
     private String  Password;
     @NotBlank(message = "Please add your email here")
+    @Email(message = "Please provide a valid email address")
     @Column(name = "Email")
     private String  Email;
     @NotBlank(message = "Please add your address here")
