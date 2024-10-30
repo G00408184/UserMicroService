@@ -17,14 +17,11 @@ public class UserService {
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
-
     }
 
     public Optional<User> getUserById(long id) {
         return userRepository.findById(id);
-
     }
-
 
     public User createUser(User user) {
         return userRepository.save(user);
