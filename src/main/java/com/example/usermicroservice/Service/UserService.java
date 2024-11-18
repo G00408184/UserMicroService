@@ -24,6 +24,7 @@ public class UserService {
     }
 
     public User createUser(User user) {
+        user.setAdmin(false);
         return userRepository.save(user);
 
     }
@@ -36,13 +37,23 @@ public class UserService {
         return false;
     }
 
-    public boolean updateUserById(long id, User user) {
-        if (userRepository.existsById(id)) {
-            user.setId(id);
-            userRepository.save(user);
+    public boolean updateUser(long userId, User updatedUser) {
+        Optional<User> existingUserOptional = userRepository.findById(userId);
+
+        if (existingUserOptional.isPresent()) {
+            User existingUser = existingUserOptional.get();
+
+            // Check if the isAdmin field is being changed
+            if (existingUser.isAdmin() != updatedUser.isAdmin()) {
+                throw new IllegalArgumentException("You cannot change the admin status.");
+            }
+
+            // Keep the same ID and save the updated user
+            updatedUser.setId(userId);
+            userRepository.save(updatedUser);
             return true;
         } else {
-            return false;
+            return false; // User not found
         }
     }
 }

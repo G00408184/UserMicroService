@@ -1,6 +1,7 @@
 package com.example.usermicroservice.Controller;
 
 import com.example.usermicroservice.Entity.User;
+import com.example.usermicroservice.Entity.UserDetails;
 import com.example.usermicroservice.Service.AdminService;
 import com.example.usermicroservice.Service.UserService;
 import com.example.usermicroservice.repository.UserRepository;
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable long id) {
-        if (!adminService.CheckIfAdmin(id)){
+    public ResponseEntity<String> deleteUser(@PathVariable long id, @RequestBody UserDetails userDetails) {
+        if (!adminService.CheckIfAdmin(userDetails.getEmail(), userDetails.getPassword())){
             return new ResponseEntity<>("You're not an admin", HttpStatus.NOT_FOUND);
         }
         if (userService.deleteUserById(id)){
@@ -54,10 +55,10 @@ public class UserController {
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<User> editUser(@PathVariable long id, @RequestBody User User) {
-        boolean isUpdated = userService.updateUserById(id, User);
+    public ResponseEntity<User> editUser(@PathVariable long id, @RequestBody User user) {
+        boolean isUpdated = userService.updateUser(id, user);
         if (isUpdated) {
-            return ResponseEntity.ok(User);
+            return ResponseEntity.ok(user);
         } else {
             return ResponseEntity.notFound().build();
         }

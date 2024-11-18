@@ -1,0 +1,6 @@
+In Loan and Book, you can have a entity called user details
+
+Then you send in User details as a parameter to the AdminController
+
+Then extract and check the database if it exist
+
