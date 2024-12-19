@@ -1,17 +1,13 @@
 package com.example.usermicroservice.Controller;
-
 import com.example.usermicroservice.Entity.User;
 import com.example.usermicroservice.Entity.UserDetails;
 import com.example.usermicroservice.Service.AdminService;
 import com.example.usermicroservice.Service.UserService;
-import com.example.usermicroservice.repository.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,14 +20,15 @@ public class UserController {
 
     private AdminService adminService;;
 
+    //
 
-    @GetMapping("/get")
-    public ResponseEntity<List<User>> getAllUser() {
+    @GetMapping("/Check")
+    public Boolean getAllUser(@RequestBody UserDetails userDetails) {
         List<User> users = userService.getAllUsers();
-        return ResponseEntity.ok(users);
+        return true;
     }
 
-    @GetMapping("/get/{id}")
+    @GetMapping("/Check/{id}")
     public ResponseEntity<User> getUserById(@PathVariable long id) {
         Optional<User> user =  userService.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
