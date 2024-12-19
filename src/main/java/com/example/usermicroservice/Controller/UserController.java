@@ -23,14 +23,14 @@ public class UserController {
     //
 
     @GetMapping("/Check")
-    public Boolean getAllUser(@RequestBody UserDetails userDetails) {
+    public Boolean getAllUser() {
         List<User> users = userService.getAllUsers();
         return true;
     }
 
     @GetMapping("/Check/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id) {
-        Optional<User> user =  userService.getUserById(id);
+    public ResponseEntity<User> getUserById(@RequestBody UserDetails userDetails) {
+        Optional<User> user =  userService.getUserById(userDetails);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
@@ -41,19 +41,19 @@ public class UserController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteUser(@PathVariable long id, @RequestBody UserDetails userDetails) {
+    public ResponseEntity<String> deleteUser(@RequestBody UserDetails userDetails) {
         if (!adminService.CheckIfAdmin(userDetails.getEmail(), userDetails.getPassword())){
             return new ResponseEntity<>("You're not an admin", HttpStatus.NOT_FOUND);
         }
-        if (userService.deleteUserById(id)){
+        if (userService.deleteUserById(userDetails)){
             return ResponseEntity.ok("User deleted successfully");
         }
         return ResponseEntity.notFound().build();
     }
 
     @PutMapping("/edit/{id}")
-    public ResponseEntity<User> editUser(@PathVariable long id, @RequestBody User user) {
-        boolean isUpdated = userService.updateUser(id, user);
+    public ResponseEntity<User> editUser(@RequestBody UserDetails userDetails, @RequestBody User user) {
+        boolean isUpdated = userService.updateUser(userDetails, user);
         if (isUpdated) {
             return ResponseEntity.ok(user);
         } else {

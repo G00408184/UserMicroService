@@ -1,6 +1,7 @@
 package com.example.usermicroservice.Service;
 
 import com.example.usermicroservice.Entity.User;
+import com.example.usermicroservice.Entity.UserDetails;
 import com.example.usermicroservice.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +20,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public Optional<User> getUserById(long id) {
-        return userRepository.findById(id);
+    public Optional<User> getUserById(UserDetails userDetails) {
+
+        return userRepository.findByEmailAndPassword(userDetails.getEmail(), userDetails.getPassword());
     }
 
     public User createUser(User user) {
@@ -29,16 +31,17 @@ public class UserService {
 
     }
 
-    public boolean deleteUserById(long id) {
-        if (userRepository.existsById(id)) {
-            userRepository.deleteById(id);
+    public boolean deleteUserById(UserDetails userDetails) {
+        Optional<User> user = userRepository.findByEmailAndPassword(userDetails.getEmail(), userDetails.getPassword());
+        if (user.isPresent()) {
+            userRepository.deleteById(user.get().getId());
             return true;
         }
         return false;
     }
 
-    public boolean updateUser(long userId, User updatedUser) {
-        Optional<User> existingUserOptional = userRepository.findById(userId);
+    public boolean updateUser(UserDetails userDetails, User updatedUser) {
+        Optional<User> existingUserOptional = userRepository.findByEmailAndPassword(userDetails.getEmail(), userDetails.getPassword());
 
         if (existingUserOptional.isPresent()) {
             User existingUser = existingUserOptional.get();
@@ -49,7 +52,7 @@ public class UserService {
             }
 
             // Keep the same ID and save the updated user
-            updatedUser.setId(userId);
+            updatedUser.setId(existingUserOptional.get().getId());
             userRepository.save(updatedUser);
             return true;
         } else {
