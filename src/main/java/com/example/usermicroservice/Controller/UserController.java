@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/user")
 public class UserController {
 
     private UserService userService;
@@ -28,10 +28,17 @@ public class UserController {
         return true;
     }
 
-    @GetMapping("/Check/{id}")
-    public ResponseEntity<User> getUserById(@RequestBody UserDetails userDetails) {
+    // Changing this to where it check if the ID is valid
+
+    @GetMapping("/Check/User/{id}")
+    public boolean CheckUserByID(@PathVariable Long id) {
+        return userService.CheckUserbyID(id);
+    }
+
+    @GetMapping("/Check/User")
+    public boolean getUserById(@RequestBody UserDetails userDetails) {
         Optional<User> user =  userService.getUserById(userDetails);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+        return user.isPresent();
     }
 
     @PostMapping("/addUser")
@@ -40,7 +47,7 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestBody UserDetails userDetails) {
         if (!adminService.CheckIfAdmin(userDetails.getEmail(), userDetails.getPassword())){
             return new ResponseEntity<>("You're not an admin", HttpStatus.NOT_FOUND);
@@ -51,7 +58,7 @@ public class UserController {
         return ResponseEntity.notFound().build();
     }
 
-    @PutMapping("/edit/{id}")
+    @PutMapping("/edit")
     public ResponseEntity<User> editUser(@RequestBody UserDetails userDetails, @RequestBody User user) {
         boolean isUpdated = userService.updateUser(userDetails, user);
         if (isUpdated) {

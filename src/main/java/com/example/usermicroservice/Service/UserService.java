@@ -25,6 +25,12 @@ public class UserService {
         return userRepository.findByEmailAndPassword(userDetails.getEmail(), userDetails.getPassword());
     }
 
+    public boolean CheckUserbyID(long id) {
+
+        return userRepository.existsById(id);
+
+    }
+
     public User createUser(User user) {
         user.setAdmin(false);
         return userRepository.save(user);
