@@ -8,4 +8,6 @@ public class Message {
     private String email;
     private String content;
     private String timestamp;
+    private String Type;
+
 }
