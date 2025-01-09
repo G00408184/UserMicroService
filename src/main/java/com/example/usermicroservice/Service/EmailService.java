@@ -26,8 +26,9 @@ public class EmailService {
         javaMailSender.send(message);
     }
 */
-   @Async
+
    public void sendEmail(String link, String subject, String content, String timestamp) throws MessagingException {
+       System.out.println("It reached it");
        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
@@ -48,10 +49,10 @@ public class EmailService {
        helper.setSubject(subject);
        helper.setText(htmlContent, true);
        helper.setFrom("emilycarter198512@gmail.com");
+       System.out.println("It reached it");
 
        javaMailSender.send(mimeMessage);
    }
-    @Async
     public void SendEmailToUser(String recipientEmail, String subject, String text) throws MessagingException {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
