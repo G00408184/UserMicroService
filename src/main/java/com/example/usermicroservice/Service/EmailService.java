@@ -32,7 +32,6 @@ public class EmailService {
        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
        MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
 
-       // Cleaned up and fixed HTML email content
        String htmlContent = "<html>" +
                "<body style='font-family: Arial, sans-serif; line-height: 1.5;'>" +
                "<h2 style='color: #007BFF;'>" + subject + "</h2>" +
@@ -44,7 +43,6 @@ public class EmailService {
                "</body>" +
                "</html>";
 
-       // Send the email with the dynamic link and provided data
        helper.setTo("rayanzyad99@gmail.com");
        helper.setSubject(subject);
        helper.setText(htmlContent, true);

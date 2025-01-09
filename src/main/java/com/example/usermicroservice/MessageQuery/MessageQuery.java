@@ -27,7 +27,7 @@ public void receiveMessage(Message message)  {
 
 
             case "ExtendLoan":
-                String loanId = message.getType(); // Assuming loanId is stored in the 'type' field
+                String loanId = message.getType();
                 String link = "http://localhost:8080/api/loans/PermissionGranted/" + loanId;
 
                 emailService.sendEmail(
@@ -38,13 +38,13 @@ public void receiveMessage(Message message)  {
                 );
                 break;
             case "Book":
-                String bookId = message.getType(); // Assuming bookId is stored in the 'type' field
+                String bookId = message.getType();
                 String bookLink = "http://localhost:8083/books/addGranted/" + bookId;
 
                 emailService.sendEmail(
                         bookLink,
                         "Book Addition Request",
-                        "A book has been added with the ID: " + bookId, // Fixed to show the bookId instead of the link
+                        "A book has been added with the ID: " + bookId,
                         message.getTimestamp()
                 );
                 // Logic for booking
